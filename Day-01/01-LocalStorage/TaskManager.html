@@ -18,6 +18,32 @@
         /*
             new key = new Date().valueOf().toString()
         */
+        var storage = window.localStorage;
+
+        var taskStorage = {
+            getAll : function(){
+                var result = [];
+                for(var i=0; i<storage.length;i++){
+                    var taskId = storage.key(i);
+                    var taskName = storage.getItem(taskId);
+                    var task = {
+                        taskId : taskId,
+                        taskName : taskName
+                    };
+                    result.push(task);
+                }
+                return result;
+            },
+            save : function(taskName){
+                var id = new Date().valueOf().toString();
+                storage.setItem(id, taskName);
+                return id;
+            },
+            remove : function(taskId){
+                storage.removeItem(taskId);
+            }
+        }
+
         window.addEventListener("DOMContentLoaded", init);
         function init(){
             var btnAdd = document.getElementById("btnAdd");
@@ -25,10 +51,24 @@
             
             var btnRemoveCompleted = document.getElementById("btnRemoveCompleted");
             btnRemoveCompleted.addEventListener("click", onBtnRemoveCompletedClick);
+
+            var tasks = taskStorage.getAll();
+            for(var i=0; i<tasks.length;i++){
+                var task = tasks[i];
+                addTaskToList(task.taskId, task.taskName);
+            }
         }
         function onBtnAddClick(){
             var taskName = document.getElementById("txtTask").value;
+
+            var taskId = taskStorage.save(taskName);
+            addTaskToList(taskId, taskName);
+
+        }
+
+        function addTaskToList(taskId, taskName){
             var newTaskItem = document.createElement("li");
+            newTaskItem.setAttribute("taskId", taskId);
             newTaskItem.textContent = taskName;
             newTaskItem.addEventListener("click", onTaskItemClick);
             document.getElementById("olTaskList").appendChild(newTaskItem);
@@ -42,8 +82,11 @@
             var taskItems = document.getElementById("olTaskList").children;
             for(var i=taskItems.length-1; i>=0; i--){
                 var taskItem = taskItems[i];
-                if (taskItem.classList.contains("completed"))
+                if (taskItem.classList.contains("completed")){
+                    var taskId = taskItem.getAttribute("taskId");
+                    taskStorage.remove(taskId);
                     taskItem.remove();
+                }
             }
         }
     
