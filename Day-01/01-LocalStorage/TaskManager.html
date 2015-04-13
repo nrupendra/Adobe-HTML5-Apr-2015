@@ -44,6 +44,10 @@
             }
         }
 
+        window.addEventListener("storage", function(evtArg){
+            loadTasksFromStorage();
+        });
+
         window.addEventListener("DOMContentLoaded", init);
         function init(){
             var btnAdd = document.getElementById("btnAdd");
@@ -51,6 +55,11 @@
             
             var btnRemoveCompleted = document.getElementById("btnRemoveCompleted");
             btnRemoveCompleted.addEventListener("click", onBtnRemoveCompletedClick);
+            loadTasksFromStorage();
+
+        }
+        function loadTasksFromStorage(){
+            document.getElementById("olTaskList").innerHTML = "";
 
             var tasks = taskStorage.getAll();
             for(var i=0; i<tasks.length;i++){
