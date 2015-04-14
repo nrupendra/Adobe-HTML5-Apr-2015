@@ -14,6 +14,7 @@ http.createServer(function (req, res) {
   }
 
   if (fileName === "./stream") {
+    console.log(req.headers);
     res.writeHead(200, {"Content-Type":"text/event-stream", "Cache-Control":"no-cache", "Connection":"keep-alive"});
     res.write("retry: 10000\n");
     res.write("event: connecttime\n");

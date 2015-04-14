@@ -12,7 +12,8 @@
       var source;
 
       function connect() {
-        source = new EventSource("stream");
+        source = new EventSource("stream/");
+
         source.addEventListener("message", function(event) {
           output.textContent = event.data;
         }, false);
