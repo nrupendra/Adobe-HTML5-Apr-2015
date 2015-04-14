@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      #slider {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+    <input id="slider" type="range" min="0" max="360" step="5" value="20">
+    <script src="kinetic-v5.1.0.js"></script>
+    <script defer="defer">
+      var imageObj = new Image();
+      imageObj.onload = function() {
+        var stage = new Kinetic.Stage({
+          container: 'container',
+          width: 578,
+          height: 300
+        });
+        var layer = new Kinetic.Layer();
+        darth = new Kinetic.Image({
+          x: 10,
+          y: 10,
+          image: imageObj,
+          draggable: true,
+          blurRadius: 20
+        });
+
+        layer.add(darth);
+        stage.add(layer);
+
+        darth.cache();
+        darth.filters([Kinetic.Filters.Kaleidoscope]);
+        darth.kaleidoscopePower(3);
+        layer.draw();
+
+        var slider = document.getElementById('slider');
+        slider.onchange = function() {
+          darth.kaleidoscopeAngle(slider.value);
+          layer.batchDraw();
+
+        };
+      };
+      imageObj.src = 'darth-vader.jpg';
+    </script>
+  </body>
+</html>
